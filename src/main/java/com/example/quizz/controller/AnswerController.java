@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping(path = "api/v1/answer")
 public class AnswerController {
     @Autowired
@@ -30,7 +31,7 @@ public class AnswerController {
     @PostMapping
     ResponseEntity<ResponseData> insertAnswer(@RequestBody Answer Answer)
     {
-        List<Answer>lstqu=this.repository.findByName(Answer.getName().trim());
+        List<Answer>lstqu=this.repository.findAllByNameContaining(Answer.getName().trim());
         if(lstqu.size()>0)
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseData("Fail","INSERT PRODUCT FAIL",""));
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseData("Success","Query product success",this.repository.save(Answer)));

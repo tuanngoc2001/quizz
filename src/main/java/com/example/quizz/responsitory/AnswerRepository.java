@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer,Integer> {
-    List<Answer> findByName(String name);
+    List<Answer> findAllByNameContaining(String name);
 }

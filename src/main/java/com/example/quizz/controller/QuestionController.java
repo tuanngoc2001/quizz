@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping(path = "api/v1/question")
 public class QuestionController {
     @Autowired
@@ -30,14 +31,14 @@ public class QuestionController {
     {
         return repository.findById(id);
     }
-    @PostMapping
-    ResponseEntity<ResponseData> InsertQuestion(@RequestBody Question question)
-    {
-        List<Question>lstqu=this.repository.findByName(question.getContent().trim());
-        if(lstqu.size()>0)
-            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseData("Fail","INSERT PRODUCT FAIL",""));
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseData("Success","Query product success",this.repository.save(question)));
-    }
+//    @PostMapping
+//    ResponseEntity<ResponseData> InsertQuestion(@RequestBody Question question)
+//    {
+//        List<Question>lstqu=this.repository.findByName(question.getContent().trim());
+//        if(lstqu.size()>0)
+//            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseData("Fail","INSERT PRODUCT FAIL",""));
+//        return ResponseEntity.status(HttpStatus.OK).body(new ResponseData("Success","Query product success",this.repository.save(question)));
+//    }
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseData> DeleteById(@PathVariable int id)
     {

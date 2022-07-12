@@ -11,7 +11,7 @@ public class QuestionService implements IQuestionService{
     QuestionRepository repository;
     @Override
     public Iterable<Question> GetAllQuestion() {
-        return null;
+        return repository.findAll();
     }
 
     @Override

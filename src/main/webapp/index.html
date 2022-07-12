@@ -8,30 +8,57 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
             integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
             crossorigin="anonymous"
     />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </head>
 <body>
 <div class="quizz">
-    <h3 class="quizz__answer">Nguyễn Tuấn Ngọc</h3>
+    <h3 class="quizz__answer"></h3>
     <div class="quizz__question">
-        <input type="radio" id="html" name="fav_language" value="HTML">
-        <label for="html">HTML</label><br>
-        <input type="radio" id="css" name="fav_language" value="CSS">
-        <label for="css">CSS</label><br>
-        <input type="radio" id="javascript" name="fav_language" value="JavaScript">
-        <label for="javascript">JavaScript</label>
+<!--        <input type="radio" id="html" name="fav_language" value="HTML">-->
+<!--        <label for="html">HTML</label><br>-->
+<!--        <input type="radio" id="css" name="fav_language" value="CSS">-->
+<!--        <label for="css">CSS</label><br>-->
+<!--        <input type="radio" id="javascript" name="fav_language" value="JavaScript">-->
+<!--        <label for="javascript">JavaScript</label>-->
     </div>
 
 </div>
 <script>
-    $.ajax({
 
+    function loadAnswer(data)
+    {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/api/v1/question",
+            success: function (list) {
+                let str = "";
+                for (let i = 0; i < list.length; i++) {
+                    str += `${list[i].content}
+                       `;
+                }
+                document.getElementById('quizz__answer').innerHTML=str;
+            },
+        });
+    }
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/v1/question",
+        success: function (list) {
+            let str = "";
+            for (let i = 0; i < list.length; i++) {
+                str += `${list[i].name}
+                       `;
+            }
+            console.log(list);
+            document.getElementById('quizz__answer').innerHTML=str;
+        },
     });
 </script>
 
