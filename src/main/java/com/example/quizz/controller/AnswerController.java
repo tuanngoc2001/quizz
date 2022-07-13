@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,13 @@ public class AnswerController {
         return new ResponseEntity(repository.findAll(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity getAnswerById(@PathVariable int id) {
-        return new ResponseEntity(repository.findById(id), HttpStatus.OK);
+    public ResponseEntity getQuestionById(@PathVariable int id) {
+        return new ResponseEntity(repository.findAllByQuestionId(id), HttpStatus.OK);
+    }
+    @GetMapping("/question-management/{id-question}")
+    public ResponseEntity<Answer>getAnswerTrue(@RequestBody int id,@RequestBody int isTrue)
+    {
+        return new ResponseEntity<>(repository.findAllByQuestionIdAndAndIsTrue(id,isTrue),HttpStatus.OK);
     }
     @PostMapping
     ResponseEntity<ResponseData> insertAnswer(@RequestBody Answer Answer)

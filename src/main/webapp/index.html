@@ -4,46 +4,114 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
-
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
             integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
             crossorigin="anonymous"
     />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <style>
+        html{
+            font-family: sans-serif;
+        }
+        body{
+            background-color: #eee;
+        }
+        .quizz{
+            width: 30rem;
+            margin: 0 auto;
+
+        }
+        #quizz__question{
+            font-weight: normal;
+            font-size: 1.2rem;
+        }
+    </style>
 </head>
 <body>
 <div class="quizz">
-    <h3 class="quizz__answer"></h3>
-    <div class="quizz__question">
-<!--        <input type="radio" id="html" name="fav_language" value="HTML">-->
-<!--        <label for="html">HTML</label><br>-->
-<!--        <input type="radio" id="css" name="fav_language" value="CSS">-->
-<!--        <label for="css">CSS</label><br>-->
-<!--        <input type="radio" id="javascript" name="fav_language" value="JavaScript">-->
-<!--        <label for="javascript">JavaScript</label>-->
-    </div>
-
+    <h3 id="quizz__question"></h3>
+    <input type="submit" onclick="calculator()" value="Nộp bài">
 </div>
 <script>
-
-    function loadAnswer(data)
+    function isCheck(data)
     {
         $.ajax({
             type: "GET",
             url: "http://localhost:8080/api/v1/question",
             success: function (list) {
-                let str = "";
                 for (let i = 0; i < list.length; i++) {
-                    str += `${list[i].content}
-                       `;
+                    if(list[i].type==1)
+                    {
+                        let radio=document.getElementsByName("1");
+                        console.log(radio[0].value);
+                    }
+                    else
+                    {
+                        var checkbox = document.getElementsByName('2');
+                        console.log(checkbox[0].value);
+                    }
                 }
-                document.getElementById('quizz__answer').innerHTML=str;
+                // alert("Có tổng 4 câu đúng");
+            },
+    }
+    function calculator()
+    {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/api/v1/question",
+            success: function (list) {
+                for (let i = 0; i < list.length; i++) {
+                    if(list[i].type==1)
+                    {
+                        let radio=document.getElementsByName("1");
+                        console.log(radio[0].value);
+                    }
+                    else
+                    {
+                        var checkbox = document.getElementsByName('2');
+                        console.log(checkbox[0].value);
+                    }
+                }
+                // alert("Có tổng 4 câu đúng");
+            },
+        });
+    }
+    function loadAnswer(data)
+    {
+        console.log(data.id);
+        let str = "";
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/api/v1/answer/"+data.id,
+            success: function (list) {
+                if(data.type==1)
+                {
+
+                    for (let i = 0; i < list.length; i++) {
+                        str += `
+                                <input type="radio" id="${list[i].id}" name="${data.id}" >
+                                <label for="${list[i].id}">${list[i].name}</label><br>
+                       `;
+                    }
+                }
+                else{
+                    for (let i = 0; i < list.length; i++) {
+                        str += `
+                                <input type="checkbox" id="${list[i].id}" name="${data.id}" >
+                                <label for="${list[i].id}"> ${list[i].name}</label><br>
+                       `;
+                    }
+                }
+                console.log(data)
+                document.getElementById('answer'+data.id).innerHTML=str;
             },
         });
     }
@@ -53,11 +121,12 @@
         success: function (list) {
             let str = "";
             for (let i = 0; i < list.length; i++) {
-                str += `${list[i].name}
-                       `;
+                str += `<h4>Cau hoi ${list[i].id}: ${list[i].content}=</h4>
+                <div id="answer${list[i].id}"></div>
+                `;
+                loadAnswer(list[i]);
             }
-            console.log(list);
-            document.getElementById('quizz__answer').innerHTML=str;
+            document.getElementById('quizz__question').innerHTML=str;
         },
     });
 </script>
