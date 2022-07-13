@@ -29,11 +29,11 @@ public class AnswerController {
     public ResponseEntity getQuestionById(@PathVariable int id) {
         return new ResponseEntity(repository.findAllByQuestionId(id), HttpStatus.OK);
     }
-    @GetMapping("/question-management/{id-question}")
-    public ResponseEntity<Answer>getAnswerTrue(@RequestBody int id,@RequestBody int isTrue)
-    {
-        return new ResponseEntity<>(repository.findAllByQuestionIdAndAndIsTrue(id,isTrue),HttpStatus.OK);
-    }
+//    @GetMapping("/question-management")
+//    public ResponseEntity<Answer>getAnswerTrue(@RequestParam int id,@RequestParam int isTrue)
+//    {
+//        return new ResponseEntity<>(repository.findAnswerByQuestionId(id,isTrue),HttpStatus.OK);
+//    }
     @PostMapping
     ResponseEntity<ResponseData> insertAnswer(@RequestBody Answer Answer)
     {

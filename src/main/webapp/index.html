@@ -50,17 +50,19 @@
                 for (let i = 0; i < list.length; i++) {
                     if(list[i].type==1)
                     {
+                        // console.log(data.id);
                         let radio=document.getElementsByName("1");
-                        console.log(radio[0].value);
+                        // console.log(radio[0].value);
                     }
                     else
                     {
                         var checkbox = document.getElementsByName('2');
-                        console.log(checkbox[0].value);
+                        // console.log(checkbox[0].value);
                     }
                 }
                 // alert("Có tổng 4 câu đúng");
             },
+    });
     }
     function calculator()
     {
@@ -71,13 +73,13 @@
                 for (let i = 0; i < list.length; i++) {
                     if(list[i].type==1)
                     {
-                        let radio=document.getElementsByName("1");
-                        console.log(radio[0].value);
+                        let radio=document.getElementsByName(list[i].id);
+
                     }
                     else
                     {
                         var checkbox = document.getElementsByName('2');
-                        console.log(checkbox[0].value);
+                        // console.log(checkbox[0].value);
                     }
                 }
                 // alert("Có tổng 4 câu đúng");
@@ -86,7 +88,7 @@
     }
     function loadAnswer(data)
     {
-        console.log(data.id);
+        // console.log(data.id);
         let str = "";
         $.ajax({
             type: "GET",
@@ -100,6 +102,7 @@
                                 <input type="radio" id="${list[i].id}" name="${data.id}" >
                                 <label for="${list[i].id}">${list[i].name}</label><br>
                        `;
+                        // console.log("${data.content}");
                     }
                 }
                 else{
@@ -110,7 +113,6 @@
                        `;
                     }
                 }
-                console.log(data)
                 document.getElementById('answer'+data.id).innerHTML=str;
             },
         });
