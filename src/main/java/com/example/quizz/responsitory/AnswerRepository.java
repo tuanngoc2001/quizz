@@ -13,7 +13,4 @@ import java.util.List;
 public interface AnswerRepository extends JpaRepository<Answer,Integer> {
     List<Answer> findAllByNameContaining(String name);
     Iterable<Answer> findAllByQuestionId(int id);
-//    @Modifying
-//    @Query(value = "select *from answer where question_id=:id and is_true=:isTrue", nativeQuery = true)
-//    Answer findAnswerByQuestionId(int id,int isTrue);
 }

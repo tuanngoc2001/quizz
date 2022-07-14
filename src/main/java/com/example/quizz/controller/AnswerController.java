@@ -29,11 +29,6 @@ public class AnswerController {
     public ResponseEntity getQuestionById(@PathVariable int id) {
         return new ResponseEntity(repository.findAllByQuestionId(id), HttpStatus.OK);
     }
-//    @GetMapping("/question-management")
-//    public ResponseEntity<Answer>getAnswerTrue(@RequestParam int id,@RequestParam int isTrue)
-//    {
-//        return new ResponseEntity<>(repository.findAnswerByQuestionId(id,isTrue),HttpStatus.OK);
-//    }
     @PostMapping
     ResponseEntity<ResponseData> insertAnswer(@RequestBody Answer Answer)
     {
@@ -46,8 +41,8 @@ public class AnswerController {
     public ResponseEntity<ResponseData> deleteById(@PathVariable int id)
     {
         boolean check= repository.existsById(id);//kiểm tra xem id này có không
-        if(check)
-        {
+        if(
+                {check)
             repository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseData("Success","Delete PRODUCT Success",""));
 

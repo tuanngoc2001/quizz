@@ -41,54 +41,46 @@
     <input type="submit" onclick="calculator()" value="Nộp bài">
 </div>
 <script>
+    load();
     function isCheck(data)
     {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/v1/question",
+            url: "http://localhost:8080/api/v1/answer/"+data.id,
             success: function (list) {
                 for (let i = 0; i < list.length; i++) {
-                    if(list[i].type==1)
-                    {
-                        // console.log(data.id);
-                        let radio=document.getElementsByName("1");
-                        // console.log(radio[0].value);
-                    }
-                    else
-                    {
-                        var checkbox = document.getElementsByName('2');
-                        // console.log(checkbox[0].value);
+                    console.log(data.radio[i].checked);
+                    console.log(list[i].isTrue);
+                    if(list[i].isTrue!=1&&data.radio[i].checked!=false||list[i].isTrue!=0&&data.radio[i].checked!=true) {
+                        return ;
                     }
                 }
-                // alert("Có tổng 4 câu đúng");
+
             },
-    });
+           });
     }
     function calculator()
     {
+
         $.ajax({
             type: "GET",
             url: "http://localhost:8080/api/v1/question",
             success: function (list) {
                 for (let i = 0; i < list.length; i++) {
-                    if(list[i].type==1)
-                    {
-                        let radio=document.getElementsByName(list[i].id);
-
+                    let radio=document.getElementsByName(list[i].id);
+                    let obj={
+                        id:list[i].id,
+                        radio:radio,
                     }
-                    else
-                    {
-                        var checkbox = document.getElementsByName('2');
-                        // console.log(checkbox[0].value);
-                    }
+                    isCheck(obj);
                 }
-                // alert("Có tổng 4 câu đúng");
+
             },
         });
+
     }
     function loadAnswer(data)
     {
-        // console.log(data.id);
         let str = "";
         $.ajax({
             type: "GET",
@@ -117,20 +109,24 @@
             },
         });
     }
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/v1/question",
-        success: function (list) {
-            let str = "";
-            for (let i = 0; i < list.length; i++) {
-                str += `<h4>Cau hoi ${list[i].id}: ${list[i].content}=</h4>
+    function load()
+    {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/api/v1/question",
+            success: function (list) {
+                let str = "";
+                for (let i = 0; i < list.length; i++) {
+                    str += `<h4>Cau hoi ${list[i].id}: ${list[i].content}=</h4>
                 <div id="answer${list[i].id}"></div>
                 `;
-                loadAnswer(list[i]);
-            }
-            document.getElementById('quizz__question').innerHTML=str;
-        },
-    });
+                    loadAnswer(list[i]);
+                }
+                document.getElementById('quizz__question').innerHTML=str;
+            },
+        });
+    }
+
 </script>
 
 </body>
