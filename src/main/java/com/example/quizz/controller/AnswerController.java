@@ -41,8 +41,7 @@ public class AnswerController {
     public ResponseEntity<ResponseData> deleteById(@PathVariable int id)
     {
         boolean check= repository.existsById(id);//kiểm tra xem id này có không
-        if(
-                {check)
+        if(check){
             repository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseData("Success","Delete PRODUCT Success",""));
 
@@ -60,7 +59,6 @@ public class AnswerController {
                 pr -> {
                     pr.setId(answer.getId());
                     pr.setName(answer.getName());
-
                     pr.setQuestion(answer.getQuestion());
                     pr.setIsTrue(answer.getIsTrue());
                     return repository.save(pr);

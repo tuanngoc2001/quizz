@@ -55,30 +55,31 @@
                         return ;
                     }
                 }
-
             },
            });
     }
     function calculator()
     {
-
         $.ajax({
             type: "GET",
             url: "http://localhost:8080/api/v1/question",
             success: function (list) {
                 for (let i = 0; i < list.length; i++) {
                     let radio=document.getElementsByName(list[i].id);
+                    console.log(list[i].id);
                     let obj={
                         id:list[i].id,
                         radio:radio,
                     }
                     isCheck(obj);
                 }
-
             },
         });
-
     }
+    // function addQuestion(data)
+    // {
+    //
+    // }
     function loadAnswer(data)
     {
         let str = "";
@@ -88,13 +89,11 @@
             success: function (list) {
                 if(data.type==1)
                 {
-
                     for (let i = 0; i < list.length; i++) {
                         str += `
                                 <input type="radio" id="${list[i].id}" name="${data.id}" >
                                 <label for="${list[i].id}">${list[i].name}</label><br>
                        `;
-                        // console.log("${data.content}");
                     }
                 }
                 else{
@@ -109,8 +108,7 @@
             },
         });
     }
-    function load()
-    {
+    function load() {
         $.ajax({
             type: "GET",
             url: "http://localhost:8080/api/v1/question",
@@ -122,11 +120,10 @@
                 `;
                     loadAnswer(list[i]);
                 }
-                document.getElementById('quizz__question').innerHTML=str;
+                document.getElementById('quizz__question').innerHTML = str;
             },
         });
     }
-
 </script>
 
 </body>
