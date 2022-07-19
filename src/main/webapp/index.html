@@ -4,34 +4,46 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+            crossorigin="anonymous"></script>
     <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-            crossorigin="anonymous"
-    />
     <style>
-        html{
+        html {
             font-family: sans-serif;
         }
-        body{
+
+        body {
             background-color: #eee;
         }
-        .quizz{
+
+        .quizz {
             width: 30rem;
             margin: 0 auto;
 
+
         }
-        #quizz__question{
+
+        #quizz__question {
             font-weight: normal;
             font-size: 1.2rem;
+        }
+
+        #modal__body--icon {
+            padding: 0.5rem;
+            border-radius: 50%;
+            background-color: green;
+            color: white;
+            margin-left: 1rem;
+
         }
     </style>
 </head>
@@ -42,89 +54,111 @@
     <input type="submit" onclick="addQuizz()" value="Add">
 </div>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-</button>
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="exampleModalLabel">Add Quizz</h5>
+
             </div>
-            <div class="modal-body">
-                ...
+            <div class="modal-body" id="modal__body">
+                <div id="modal__body--question">
+                    <h5>Question</h5>
+                    <input type="text" placeholder="question" size="50">
+                    <i class="fa fa-plus" id="modal__body--icon" onclick="addAnswer()"></i>
+                </div>
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button onclick="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                </button>
+                <button type="button" class="btn btn-primary">Add</button>
             </div>
         </div>
     </div>
 </div>
 <script>
+    let array = [];
     load();
-    function isCheck(data)
-    {
+
+    function isCheck(data) {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/v1/answer/"+data.id,
+            url: "http://localhost:8080/api/v1/answer/" + data,
             success: function (list) {
-                for (let i = 0; i < list.length; i++) {
-                    console.log(data.radio[i].checked);
-                    console.log(list[i].isTrue);
-                    if(list[i].isTrue!=1&&data.radio[i].checked!=false||list[i].isTrue!=0&&data.radio[i].checked!=true) {
-                        return ;
-                    }
+                var obj = {
+                    id: data,
+                    radio: document.getElementsByName(data),
+                    list: list,
                 }
+                addArray(obj);
             },
-           });
+        });
+        // console.log(array);
     }
-    function calculator()
-    {
+
+    function addArray(obj) {
+        array.push(obj);
+        for (let i = 0; i < obj.list.length; i++) {
+            if (obj.list[i].isTrue == 1 && obj.radio[i].checked == false || obj.list[i].isTrue == 0 && obj.radio[i].checked == true) {
+                // console.log(obj.radio[i].checked);
+                return;
+            }
+        }
+
+        localStorage.setItem("score", parseInt(localStorage.getItem('score')) + 1);
+        // console.log(localStorage.getItem('score'));
+
+        // localStorage.removeItem("score");
+        // localStorage.setItem("score",result);
+
+
+    }
+
+    function calculator() {
         $.ajax({
             type: "GET",
             url: "http://localhost:8080/api/v1/question",
             success: function (list) {
+                localStorage.setItem("score", 0);
                 for (let i = 0; i < list.length; i++) {
-                    let radio=document.getElementsByName(list[i].id);
-                    console.log(list[i].id);
-                    let obj={
-                        id:list[i].id,
-                        radio:radio,
-                    }
-                    isCheck(obj);
+                    // let radio=document.getElementsByName(list[i].id);
+                    // console.log(list[i].id);
+                    //truyền vào id của câu hỏi
+                    isCheck(list[i].id);
                 }
+
             },
         });
+        console.log(localStorage.getItem('score'));
+        alert(localStorage.getItem('score'));
+        localStorage.clear();
     }
-    function addQuizz(data)
-    {
 
+    function addQuizz() {
+        $('#exampleModal').modal('show');
 
     }
-    function loadAnswer(data)
-    {
+
+    function closeModal() {
+        $('#exampleModal').modal('hide');
+    }
+
+    function loadAnswer(data) {
         let str = "";
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/v1/answer/"+data.id,
+            url: "http://localhost:8080/api/v1/answer/" + data.id,
             success: function (list) {
-                if(data.type==1)
-                {
+                if (data.type == 1) {
                     for (let i = 0; i < list.length; i++) {
                         str += `
                                 <input type="radio" id="${list[i].id}" name="${data.id}" >
                                 <label for="${list[i].id}">${list[i].name}</label><br>
                        `;
                     }
-                }
-                else{
+                } else {
                     for (let i = 0; i < list.length; i++) {
                         str += `
                                 <input type="checkbox" id="${list[i].id}" name="${data.id}" >
@@ -132,10 +166,11 @@
                        `;
                     }
                 }
-                document.getElementById('answer'+data.id).innerHTML=str;
+                document.getElementById('answer' + data.id).innerHTML = str;
             },
         });
     }
+
     function load() {
         $.ajax({
             type: "GET",
@@ -151,6 +186,16 @@
                 document.getElementById('quizz__question').innerHTML = str;
             },
         });
+    }
+
+    function addAnswer() {
+        let str = `<div>
+                <input type="text" placeholder="text" size="40" style="margin-right: 1rem">
+                <input type="checkbox" style="transform: scale(2) placeholder="answer"">
+                </div>
+                `
+        document.getElementById('modal__body--question').innerHTML = str;
+
     }
 </script>
 
