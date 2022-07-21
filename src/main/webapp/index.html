@@ -65,7 +65,7 @@
             <div class="modal-body" id="modal__body">
                 <div id="modal__body--question">
                     <h5>Question</h5>
-                    <input type="text" placeholder="question" size="50">
+                    <input type="text" placeholder="question" size="50" id="question">
                     <i class="fa fa-plus" id="modal__body--icon" onclick="addAnswer()"></i>
                 </div>
 
@@ -73,15 +73,43 @@
             <div class="modal-footer">
                 <button onclick="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close
                 </button>
-                <button type="button" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-primary" onclick="AddQuestion()">Add</button>
             </div>
         </div>
     </div>
 </div>
 <script>
     let array = [];
-    load();
+    let number=0;
 
+    load();
+    function AddQuestion()
+    {
+        let checkbox=document.getElementsByName('answer');
+        let question=document.getElementById('question');
+        let isRadio=0;
+        for(let i=0;i<checkbox.length;i++)
+        {
+            if(checkbox[i].checked==true)
+                isRadio+=1;
+        }
+        if(isRadio>1)
+        {
+            var obj={
+                content:question,
+                type:2
+            }
+        }
+        else{
+            var obj={
+                content:question,
+                type:1
+            }
+        }
+        console.log(question);
+
+        console.log(checkbox);
+    }
     function isCheck(data) {
         $.ajax({
             type: "GET",
@@ -189,12 +217,15 @@
     }
 
     function addAnswer() {
-        let str = `<div>
-                <input type="text" placeholder="text" size="40" style="margin-right: 1rem">
-                <input type="checkbox" style="transform: scale(2) placeholder="answer"">
+        number+=1;
+        let str=document.getElementById("modal__body").innerHTML;
+        str += `<div>
+                <input type="text" placeholder="text" size="40" style="margin-right: 1rem" id="${number}">
+                <input type="checkbox" placeholder="answer" name="answer">
                 </div>
                 `
         document.getElementById('modal__body--question').innerHTML = str;
+        console.log(number);
 
     }
 </script>
